@@ -1,38 +1,30 @@
-import React from 'react'
-import axios from 'axios'
 import Nav from '../components/navbar.jsx'
 import Dashboard from '../components/dashboard.jsx'
 import RawData from '../components/rawData.jsx'
 import { Routes, Route } from 'react-router-dom'
+import { FaUserCircle } from "react-icons/fa";
 
 function home() {
 
-    const fetchData = async () => {
-        try {
-            const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/data`)
-            if (data.success) {
-                console.log(
-                    "Orders : ", data.orders,
-                    "Returns : ", data.returns,
-                    "Products : ", data.products,
-                )
-            }
-
-        } catch (error) {
-            console.error(`Error Fetching Data: `, error)
-        }
-    }
+    const user = JSON.parse(localStorage.getItem('user'))
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <header className='text-[41px] mt-2'>Profit-Tracker</header>
+        <div className="flex flex-col justify-center items-center">
+            <div className='w-full p-9 rounded-2xl'>
+                <div className='bg-white w-full flex justify-between items-center px-8 py-2 rounded-2xl'>
+                    <h1 className='text-[31px]'>Profit Tracker</h1>
+                    <div className='flex items-center gap-2'>
+                        <FaUserCircle size={30} />
+                        {user.shop.slice(0, 11)}
+                    </div>
+                </div>
+            </div>
             <Routes>
                 <Route path='/' element={<Nav />} >
                     <Route index element={<Dashboard />} />
                     <Route path='rawdata' element={<RawData />} />
                 </Route>
             </Routes>
-            <button onClick={() => fetchData()} className="cursor-pointer bg-black w-40 py-3 text-white rounded-[3px] mt-9">Get Data</button>
         </div >
     )
 }
