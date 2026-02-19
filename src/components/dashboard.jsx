@@ -11,7 +11,6 @@ import { CiDollar } from "react-icons/ci";
 const Dashboard = () => {
 
     const [data, setData] = useState(null)
-    const [odata, setOdata] = useState(null);
 
     useEffect(() => {
         // Function for getting all the data
@@ -25,20 +24,6 @@ const Dashboard = () => {
             }
         }
         fetchData()
-    }, [])
-
-    useEffect(() => {
-        // Function for getting the Order data
-        const getOrderData = async () => {
-            try {
-                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/orders`)
-                console.log(res.data)
-                setOdata(res.data)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        getOrderData()
     }, [])
 
     return (
@@ -107,7 +92,7 @@ const Dashboard = () => {
                             <h1 className='text-[18px]'>Total Revenue</h1>
                         </div>
                         <div className='text-[41px] ml-2'>
-                            {Math.floor(data?.stats?.totalRevenue)} Rs
+                            {Math.floor(data?.stats?.totalRevenue)}
                         </div>
                     </div>
 
@@ -174,53 +159,35 @@ const Dashboard = () => {
                                 <th>Profit</th>
                                 <th>Status</th>
                             </tr>
-                            <tr className=''>
-                                <td className='p-4'>
-                                    {odata?.order?.map((order, index) => (
-                                        <div key={index} className='p-2'>{order.orderId}</div>
-                                    ))}
-                                </td>
-                                <td className='p-4'>
-                                    {odata?.order?.map((order, index) => (
-                                        <div key={index} className='p-2'>
-                                            {new Date(order?.rawData?.updated_at).toLocaleString()}
-                                        </div>
-                                    ))}
-                                </td>
-                                <td className='p-4'>
-                                    {
-                                        odata?.order?.map((order, index) => (
-                                            <div key={index} className='p-2'>
-                                                {Math.round(order?.totalPrice - order?.rawData?.total_discounts - order?.rawData?.total_cash_rounding_refund_adjustment_set?.presentment_money?.amount)} rs
-                                            </div>
-                                        ))
-                                    }
-                                </td>
-                                <td className='p-4'>
-                                    {
-                                        odata?.order?.map((order, index) => (
-                                            <div key={index} className='p-2'>
-                                                {Math.round(order?.totalPrice) + Math.round(order?.rawData?.total_shipping_price_set?.presentment_money?.amount) +
-                                                    Math.round(order?.rawData?.total_cash_rounding_refund_adjustment_set?.presentment_money?.amount)} rs
-                                            </div>
-                                        ))
-                                    }
-                                </td>
-                                <td className='p-4'>
-                                    {data?.singleNetProfit?.map((order, index) => (
-                                        <div key={index} className='p-2'>
-                                            {order?.netProfit} rs
-                                        </div>
-                                    ))}
-                                </td>
-                                <td className='p-6'>
-                                    {data?.singleNetProfit?.map((order, index) => (
-                                        <div key={index} className='p-2'>
-                                            {order?.netProfit > 0 ? <div className='text-green-600 font-semibold'>profit</div> : <div className='text-red-600 font-semibold'>loss</div>}
-                                        </div>
-                                    ))}
-                                </td>
-                            </tr>
+
+                            {data?.singleNetProfit?.map((order, index) => {
+
+                                const totalPrice = Number(order.netProfit)
+                                const revenue = order?.revenue
+                                const cost = order?.totalPrice + order?.Shipping + order?.refund
+
+                                return (
+                                    <tr key={index}>
+                                        <td className='p-4'>{order.orderId}</td>
+
+                                        <td className='p-4'>
+                                            {new Date(order?.Date).toLocaleString()}
+                                        </td>
+
+                                        <td className='p-4'>{Math.round(revenue)} rs</td>
+
+                                        <td className='p-4'>{Math.round(cost)} rs</td>
+
+                                        <td className='p-4'>{Math.round(totalPrice)} rs</td>
+
+                                        <td className='p-4'>
+                                            {totalPrice > 0
+                                                ? <span className='text-green-600 font-semibold'>profit</span>
+                                                : <span className='text-red-600 font-semibold'>loss</span>}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </div>

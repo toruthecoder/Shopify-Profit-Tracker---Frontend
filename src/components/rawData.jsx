@@ -3,14 +3,11 @@ import { useState, useEffect } from 'react'
 
 const RawData = () => {
     const [data, setData] = useState(null)
-    const [user, setUser] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/data`)
-                const user = JSON.parse(localStorage.getItem('user'))
-                setUser(user.shop)
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/products`)
                 setData(response.data)
             } catch (error) {
                 console.error(error)
@@ -19,11 +16,23 @@ const RawData = () => {
         fetchData()
     }, [])
 
-
     return (
         <div>
-            <h1 className="my-4">shopName : {user}</h1>
-            {data ? JSON.stringify(data, null, 2) : "No Data"}
+            {data?.product?.map((product, index) => (
+                <div key={index} className='border border-[#ccc] p-[10px] my-[17px] bg-white'>
+                    <h3>Title : {product.title}</h3>
+                    <p>Vendor: {product.vendor}</p>
+                    <p>Type: {product.product_type}</p>
+                    <p>Variants:</p>
+                    <ul>
+                        {product.variants.map((variant, vIndex) => (
+                            <li key={vIndex}>
+                                {variant.title} - ${variant.price.$numberDecimal} - Stock: {variant.inventory_quantity}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
         </div>
     )
 }
