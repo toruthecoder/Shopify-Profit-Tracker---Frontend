@@ -7,10 +7,37 @@ import { CiShoppingBasket } from "react-icons/ci";
 import { PiArrowCounterClockwiseLight } from "react-icons/pi";
 import { PiPackageThin } from "react-icons/pi";
 import { CiDollar } from "react-icons/ci";
+import { Triangle } from 'react-loader-spinner'
+import { SlGraph } from "react-icons/sl";
+import { BsGraphUp } from "react-icons/bs";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
+
+
 
 const Dashboard = () => {
 
     const [data, setData] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         // Function for getting all the data
@@ -21,66 +48,84 @@ const Dashboard = () => {
                 console.log(response.data)
             } catch (error) {
                 console.error(error)
+            } finally {
+                setLoading(false)
             }
         }
         fetchData()
     }, [])
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center absolute top-100">
+                <Triangle
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#3b82f6"
+                    ariaLabel="triangle-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />
+            </div>
+        )
+    }
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+            },
+            title: {
+                display: true,
+                text: '',
+            },
+        },
+    };
+
+    const chartData = {
+        labels: data?.chartData?.map(order => {
+            const d = new Date(order?.date);
+            return `${d.getMonth() + 1}/${d.getDate()}/${String(d.getFullYear()).slice(-2)}`;
+        }) || [],
+        datasets: [
+            {
+                label: 'Sales',
+                data: data?.chartData?.map(order =>
+                    order.totalPrice
+                ) || [],
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.3)',
+                fill: false,
+                tension: 0.4,
+            }, {
+                label: 'Revenue',
+                data: data?.chartData?.map(order =>
+                    order.revenue
+                ) || [],
+                borderColor: '#008000',
+                backgroundColor: '#008000',
+                fill: false,
+                tension: 0.4,
+                range: 6000,
+            }
+        ],
+    };
     return (
         <div className='flex flex-col'>
-            <div className='mt-4 flex gap-6 flex-row'>
-                <div className='flex flex-col'>
+            <div className='mt-4 flex flex-col gap-5'>
+                <div className='grid grid-cols-5 gap-8 w-full'>
 
-                    <div>
-                        <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px]'>
-                            <div className='flex gap-4 items-center'>
-                                <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                    <CiShoppingBasket size={35} />
-                                </div>
-                                <h1 className='text-[18px]'>total orders</h1>
-                            </div>
-                            <div className='text-[41px] ml-2'>
-                                <h1>{data?.stats?.totalOrders}</h1>
-                            </div>
-                        </div>
-
-                        <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px] mt-6'>
-                            <div className='flex gap-4 items-center'>
-                                <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                    <PiArrowCounterClockwiseLight size={35} />
-                                </div>
-                                <h1 className='text-[18px]'>total Refunds</h1>
-                            </div>
-                            <div className='text-[41px] ml-2'>
-                                <h1>{data?.stats?.totalReturns}</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className='grid grid-cols-4 gap-6 w-full'>
-
-                    <div className='bg-white p-8 flex flex-col items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
+                    <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
                         <div className='flex gap-4 items-center'>
                             <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                <CiShoppingCart size={35} />
+                                <PiPackageThin size={35} />
                             </div>
-                            <h1 className='text-[18px]'>Total Sales</h1>
+                            <h1 className='text-[18px]'>total Products</h1>
                         </div>
                         <div className='text-[41px] ml-2'>
-                            {Math.floor(data?.stats?.salesResult)}
-                        </div>
-                    </div>
-
-                    <div className='bg-white p-8 flex flex-col items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
-                        <div className='flex gap-4 items-center'>
-                            <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                <PiUsersThreeLight size={35} />
-                            </div>
-                            <h1 className='text-[18px]'>Total Customers</h1>
-                        </div>
-                        <div className='text-[41px] ml-2'>
-                            {data?.stats?.totalCustomer}
+                            <h1>{data?.stats?.totalProducts}</h1>
                         </div>
                     </div>
 
@@ -108,22 +153,10 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px]'>
-                        <div className='flex gap-4 items-center'>
-                            <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                <PiPackageThin size={35} />
-                            </div>
-                            <h1 className='text-[18px]'>total Products</h1>
-                        </div>
-                        <div className='text-[41px] ml-2'>
-                            <h1>{data?.stats?.totalProducts}</h1>
-                        </div>
-                    </div>
-
                     <div className='bg-white p-8 flex flex-col items-left rounded-4xl pl-4 w-[250px] h-[178px] '>
                         <div className='flex gap-4 items-center'>
                             <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                <CiDollar size={35} />
+                                <SlGraph size={35} className='p-0.5' />
                             </div>
                             <h1 className='text-[18px]'>Net Profit</h1>
                         </div>
@@ -135,7 +168,7 @@ const Dashboard = () => {
                     <div className='bg-white p-8 flex flex-col items-left rounded-4xl pl-4 w-[250px] h-[178px] '>
                         <div className='flex gap-4 items-center'>
                             <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
-                                <CiDollar size={35} />
+                                <BsGraphUp size={35} className='p-1.5' />
                             </div>
                             <h1 className='text-[18px]'>Profit Margin</h1>
                         </div>
@@ -145,52 +178,72 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-            </div>
+                <div className='flex flex-row justify-center items-center'>
+                    <div className='flex flex-row gap-8'>
+                        <div className='grid grid-cols-2 gap-8'>
+                            <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
+                                <div className='flex gap-4 items-center'>
+                                    <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
+                                        <CiShoppingBasket size={35} />
+                                    </div>
+                                    <h1 className='text-[18px]'>total orders</h1>
+                                </div>
+                                <div className='text-[41px] ml-2'>
+                                    <h1>{data?.stats?.totalOrders}</h1>
+                                </div>
+                            </div>
 
-            <div className="order flex items-center justify-center mt-10">
-                <div className='pt-10 bg-white p-10'>
-                    <table className='pt-10'>
-                        <tbody className='bg-white'>
-                            <tr className='bg-[#e7e7e7] text-gray-500'>
-                                <th>Order ID</th>
-                                <th>Date</th>
-                                <th>Revenue</th>
-                                <th>Total Cost</th>
-                                <th>Profit</th>
-                                <th>Status</th>
-                            </tr>
+                            <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
+                                <div className='flex gap-4 items-center'>
+                                    <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
+                                        <PiArrowCounterClockwiseLight size={35} />
+                                    </div>
+                                    <h1 className='text-[18px]'>total Refunds</h1>
+                                </div>
+                                <div className='text-[41px] ml-2'>
+                                    <h1>{data?.stats?.totalReturns}</h1>
+                                </div>
+                            </div>
 
-                            {data?.singleNetProfit?.map((order, index) => {
+                            <div className='bg-white p-8 flex flex-col items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
+                                <div className='flex gap-4 items-center'>
+                                    <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
+                                        <CiShoppingCart size={35} />
+                                    </div>
+                                    <h1 className='text-[18px]'>Total Sales</h1>
+                                </div>
+                                <div className='text-[41px] ml-2'>
+                                    {Math.floor(data?.stats?.salesResult)}
+                                </div>
+                            </div>
 
-                                const totalPrice = Number(order.netProfit)
-                                const revenue = order?.revenue
-                                const cost = order?.totalPrice + order?.Shipping + order?.refund
+                            <div className='bg-white p-8 flex flex-col items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
+                                <div className='flex gap-4 items-center'>
+                                    <div className='bg-[#e7e7e7] p-2 rounded-4xl'>
+                                        <PiUsersThreeLight size={35} />
+                                    </div>
+                                    <h1 className='text-[18px]'>Total Customers</h1>
+                                </div>
+                                <div className='text-[41px] ml-2'>
+                                    {data?.stats?.totalCustomer}
+                                </div>
+                            </div>
 
-                                return (
-                                    <tr key={index}>
-                                        <td className='p-4'>{order.orderId}</td>
 
-                                        <td className='p-4'>
-                                            {new Date(order?.Date).toLocaleString()}
-                                        </td>
+                        </div>
 
-                                        <td className='p-4'>{Math.round(revenue)} rs</td>
-
-                                        <td className='p-4'>{Math.round(cost)} rs</td>
-
-                                        <td className='p-4'>{Math.round(totalPrice)} rs</td>
-
-                                        <td className='p-4'>
-                                            {totalPrice > 0
-                                                ? <span className='text-green-600 font-semibold'>profit</span>
-                                                : <span className='text-red-600 font-semibold'>loss</span>}
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
+                        <div className='flex'>
+                            <div>
+                                {data?.chartData && (
+                                    <div className=' bg-white p-1 w-180 h-[378px] rounded-2xl flex items-center'>
+                                        <Line options={options} data={chartData} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     )

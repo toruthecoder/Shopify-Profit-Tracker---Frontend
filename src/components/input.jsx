@@ -36,8 +36,6 @@ function InputCosts() {
         toast.success(`Form Submitted.`)
     }
 
-
-
     return (
         <div>
             Input Costs Manually

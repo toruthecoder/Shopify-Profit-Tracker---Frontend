@@ -2,6 +2,7 @@ import Nav from '../components/navbar.jsx'
 import Dashboard from '../components/dashboard.jsx'
 import RawData from '../components/rawData.jsx'
 import Input from '../components/input.jsx'
+import Orders from '../components/orders.jsx'
 import { Routes, Route } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
 
@@ -24,6 +25,7 @@ function home() {
                 <Route path='/' element={<Nav />} >
                     <Route index element={<Dashboard />} />
                     <Route path='rawdata' element={<RawData />} />
+                    <Route path='orders' element={<Orders />} />
                     <Route path='input' element={<Input />} />
                 </Route>
             </Routes>

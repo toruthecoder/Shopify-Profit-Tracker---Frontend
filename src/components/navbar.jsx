@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { TbLayoutDashboard } from "react-icons/tb";
 import { LuClipboardList } from "react-icons/lu";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { GoPackageDependencies } from "react-icons/go";
 import { useState } from "react";
 
 function Nav() {
@@ -27,6 +28,10 @@ function Nav() {
 
                     <li>
                         <NavLink to='/rawdata' className={linkClass}><LuClipboardList size={25} />{isExpanded && 'Products'}</NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink to='/orders' className={linkClass}><GoPackageDependencies size={25} />{isExpanded && 'Orders'}</NavLink>
                     </li>
 
                     <li>
