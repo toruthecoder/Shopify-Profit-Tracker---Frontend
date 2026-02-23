@@ -1,6 +1,6 @@
 import Nav from '../components/navbar.jsx'
 import Dashboard from '../components/dashboard.jsx'
-import RawData from '../components/rawData.jsx'
+import Products from '../components/products.jsx'
 import Input from '../components/input.jsx'
 import Orders from '../components/orders.jsx'
 import { Routes, Route } from 'react-router-dom'
@@ -24,7 +24,7 @@ function home() {
             <Routes>
                 <Route path='/' element={<Nav />} >
                     <Route index element={<Dashboard />} />
-                    <Route path='rawdata' element={<RawData />} />
+                    <Route path='products' element={<Products />} />
                     <Route path='orders' element={<Orders />} />
                     <Route path='input' element={<Input />} />
                 </Route>
