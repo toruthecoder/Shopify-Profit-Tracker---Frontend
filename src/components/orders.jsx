@@ -11,6 +11,7 @@ function Orders() {
     const [order, setOrder] = useState(null)
     const [searchParams, setSearchParams] = useSearchParams()
     const [search, setSearch] = useState('')
+    const [sort, setSort] = useState('')
     const page = parseInt(searchParams.get('page')) || 1
     const popUpref = useRef(null)
 
@@ -18,7 +19,7 @@ function Orders() {
         // Function for getting all the data
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/orders?page=${page}&limit=10&search=${search}`)
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/orders?page=${page}&limit=10&search=${search}&sort=${sort}`)
                 setData(response.data)
                 console.log(response.data)
             } catch (error) {
@@ -28,7 +29,7 @@ function Orders() {
             }
         }
         fetchData()
-    }, [page, search])
+    }, [page, search, sort])
 
     useEffect(() => {
         const closePopUp = (e) => {
@@ -47,6 +48,29 @@ function Orders() {
     const handleOpen = (ordr) => {
         setOrder(ordr)
     }
+
+    const handleSort = (e) => {
+        setSort(e.target.value)
+    }
+
+    const downloadCSV = async () => {
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/store/orders/csv`;
+            const response = await axios.get(url, { responseType: 'blob' });
+
+            const blob = new Blob([response.data], { type: 'text/csv' });
+            const downloadUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.setAttribute('download', 'orders.csv');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error('Error downloading CSV:', error);
+        }
+    };
 
     if (loading) {
         return (
@@ -69,7 +93,21 @@ function Orders() {
     return (
         <div className="order flex flex-col items-center justify-center ">
             <div className='flex items-center gap-5 mb-5'>
-                <p>Search: </p> <input type="text" placeholder='Search by title, description or id' className='w-85 h-8 rounded-[5px] pl-3 bg-white focus:outline-none focus:ring-0' value={search} onChange={(e) => setSearch(e.target.value)} />
+                <p>Search: </p> <input type="text" placeholder='Search by title, email or id' className='w-85 h-8 rounded-[5px] pl-3 bg-white focus:outline-none focus:ring-0' value={search} onChange={(e) => setSearch(e.target.value)} />
+                <p>Sort:
+                    <select value={sort} onChange={handleSort} className='w-35 h-8 rounded-[5px] pl-3 ml-6  bg-white focus:outline-none focus:ring-0'>
+                        <option value="0">SortBy</option>
+                        <option value="1">Today</option>
+                        <option value="2">Last 7 Days</option>
+                        <option value="3">Last 30 Days</option>
+                    </select>
+                </p>
+                <button
+                    className="px-4 py-2 bg-[#3b82f6] text-white rounded hover:bg-[#4c8df6] cursor-pointer"
+                    onClick={downloadCSV}
+                >
+                    export Orders CSV
+                </button>
             </div>
             <div className='pt-10 bg-white p-10 pb-5'>
                 <table className='pt-10'>

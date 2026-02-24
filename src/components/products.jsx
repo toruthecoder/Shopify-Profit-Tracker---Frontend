@@ -10,13 +10,14 @@ const Products = () => {
     const [product, setProduct] = useState(null)
     const [searchParams, setSearchParams] = useSearchParams()
     const [search, setSearch] = useState('')
+    const [sort, setSort] = useState('')
     const page = parseInt(searchParams.get('page')) || 1
     const popUpref = useRef(null)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/products?page=${page}&limit=8&search=${search}`)
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/products?page=${page}&limit=8&search=${search}&sort=${sort}`)
                 setData(response.data)
             } catch (error) {
                 console.error(error)
@@ -25,7 +26,7 @@ const Products = () => {
             }
         }
         fetchData()
-    }, [page, search])
+    }, [page, search, sort])
 
     useEffect(() => {
         const closePopUp = (e) => {
@@ -44,6 +45,27 @@ const Products = () => {
 
     const handleOpen = (pro) => {
         setProduct(pro)
+    }
+
+    const handleSort = (e) => {
+        setSort(e.target.value)
+    }
+
+    const downloadCSV = async () => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/products/csv`, { responseType: 'blob' })
+            const blob = new Blob([res.data], { type: 'text/csv' })
+            const downloadURL = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = downloadURL
+            link.setAttribute('download', 'products.csv')
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+
+        } catch (error) {
+            console.error('Error downloading CSV:', error);
+        }
     }
 
     if (loading) {
@@ -68,6 +90,20 @@ const Products = () => {
         <div className='flex flex-col items-center justify-center'>
             <div className='flex items-center gap-5'>
                 <p>Search: </p> <input type="text" placeholder='Search by title, description or id' className='w-85 h-8 rounded-[5px] pl-3 bg-white focus:outline-none focus:ring-0' value={search} onChange={(e) => setSearch(e.target.value)} />
+                <p>Sort:
+                    <select value={sort} onChange={handleSort} className='w-35 h-8 rounded-[5px] pl-3 ml-6  bg-white focus:outline-none focus:ring-0'>
+                        <option value="0">SortBy</option>
+                        <option value="1">Today</option>
+                        <option value="2">Last 7 Days</option>
+                        <option value="3">Last 30 Days</option>
+                    </select>
+                </p>
+                <button
+                    className="px-4 py-2 bg-[#3b82f6] text-white rounded hover:bg-[#4c8df6] cursor-pointer"
+                    onClick={downloadCSV}
+                >
+                    export Products CSV
+                </button>
             </div>
             <div className='grid grid-cols-2 gap-2 items-start mt-4.5'>
                 {data?.product?.map((product, index) => (
@@ -95,12 +131,12 @@ const Products = () => {
                             <h1 className='text-[21px]'>Product Details</h1>
                             <RxCross1 className='cursor-pointer ' size={20} onClick={() => handleOpen()} />
                         </div>
-                        <div className='flex gap-5'>
-                            <div className='mt-5'>
+                        <div className='flex items-center gap-5 justify-between mt-20'>
+                            <div className=''>
                                 <img src={product?.src} alt={product?.alt} className='object-contain' width={`${product?.wdth}px`} height={`${product?.hgth}px`} />
                             </div>
-                            <div className=''>
-                                <div className='flex flex-col mt-15 place-items-center gap-5'>
+                            <div className='w-[350px] h-[468px] flex flex-col items-center justify-center'>
+                                <div className='flex flex-col items-center justify-center gap-5'>
                                     <p className='font-light'><span className='text-[18px] font-semibold'>Product-Id</span> {product.id}</p>
                                     <p className='font-light'><span className='text-[18px] font-semibold'>Title</span> {product.title} </p>
                                     <p className='font-light'><span className='text-[18px] font-semibold'>Type</span> {product.type} </p>
@@ -108,7 +144,7 @@ const Products = () => {
                                     <p className='font-light'><span className='text-[18px] font-semibold'>Description: </span> {product?.html} </p>
                                     <p className='font-light'><span className='text-[18px] font-semibold'>tags: </span> {product?.tags}</p>
                                 </div>
-                                <div className='text-[17px]'>
+                                <div className='text-[17px] mt-3'>
                                     <p>Created-At: <span className='font-light'>{new Date(product?.createdAt).toLocaleString()}</span> </p>
                                     <p>Updated-At: <span className='font-light'>{new Date(product?.updatedAt).toLocaleString()}</span> </p>
                                 </div>

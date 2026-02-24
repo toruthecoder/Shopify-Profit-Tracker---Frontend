@@ -55,6 +55,23 @@ const Dashboard = () => {
         fetchData()
     }, [])
 
+    const downloadCSV = async () => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/store/data/csv`, { responseType: 'blob' })
+            const blob = new Blob([res.data], { type: 'text/csv' })
+            const downloadURL = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = downloadURL
+            link.setAttribute('download', 'Monthly_csv.csv')
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+
+        } catch (error) {
+            console.error('Error downloading CSV:', error);
+        }
+    }
+
     if (loading) {
         return (
             <div className="flex justify-center items-center absolute top-100">
@@ -115,6 +132,14 @@ const Dashboard = () => {
     return (
         <div className='flex flex-col'>
             <div className='mt-4 flex flex-col gap-5'>
+                <div className='w-full'>
+                    <button
+                        className="px-4 py-2 bg-[#3b82f6] text-white rounded hover:bg-[#4c8df6] cursor-pointer"
+                        onClick={downloadCSV}
+                    >
+                        export Products CSV
+                    </button>
+                </div>
                 <div className='grid grid-cols-5 gap-8 w-full'>
 
                     <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
