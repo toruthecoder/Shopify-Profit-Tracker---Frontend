@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import LogIn from './pages/Login.jsx'
+import LogIn from './pages/login.jsx'
 import Home from './pages/home.jsx'
 import NotFound from './pages/NotFound.jsx'
 import AuthRedirect from './pages/authRedirect.jsx'

@@ -62,7 +62,7 @@ const Dashboard = () => {
             const downloadURL = window.URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = downloadURL
-            link.setAttribute('download', 'Monthly_csv.csv')
+            link.setAttribute('download', 'Monthly_Summary.csv')
             document.body.appendChild(link)
             link.click()
             link.remove()
@@ -137,7 +137,7 @@ const Dashboard = () => {
                         className="px-4 py-2 bg-[#3b82f6] text-white rounded hover:bg-[#4c8df6] cursor-pointer"
                         onClick={downloadCSV}
                     >
-                        export Products CSV
+                        export Monthly-Summary CSV
                     </button>
                 </div>
                 <div className='grid grid-cols-5 gap-8 w-full'>
