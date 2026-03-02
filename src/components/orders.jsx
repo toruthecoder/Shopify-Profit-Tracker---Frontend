@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Triangle } from 'react-loader-spinner'
 import { useSearchParams } from 'react-router-dom'
 import { RxCross1 } from "react-icons/rx";
+import { useNavigate } from 'react-router-dom'
 
 function Orders() {
 
@@ -14,6 +15,7 @@ function Orders() {
     const [sort, setSort] = useState('')
     const page = parseInt(searchParams.get('page')) || 1
     const popUpref = useRef(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         // Function for getting all the data
@@ -46,7 +48,7 @@ function Orders() {
     }
 
     const handleOpen = (ordr) => {
-        setOrder(ordr)
+        navigate(`/orders/${ordr.orderId}`)
     }
 
     const handleSort = (e) => {

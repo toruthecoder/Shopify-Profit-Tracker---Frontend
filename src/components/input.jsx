@@ -69,7 +69,7 @@ function InputCosts() {
                     <label htmlFor="marketingSend">Marketing Costs</label>
                     <input type="number" name="marketingCosts" onChange={handleChange} className='bg-[#e7e7e7] p-1 rounded-[5px] w-120 appearance-none pl-2' placeholder='Enter Costs Here' required />
 
-                    <button className='px-4 py-1 bg-[#e7e7e7] mt-7 rounded-[5px] w-30 mx-auto cursor-pointer' type='submit'>submit</button>
+                    <button className='px-4 py-1 text-white bg-[#3b82f6] hover:bg-[#4c8df6] mt-7 rounded-[5px] w-30 mx-auto cursor-pointer' type='submit'>Submit</button>
                 </form>
             </div>
         </div>

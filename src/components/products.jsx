@@ -112,7 +112,7 @@ const Products = () => {
                         <p className='text-[14px]'>Vendor: {product.vendor}</p>
                         <p className='text-[14px]'>Type: {product.type}</p>
                         <p className='text-[14px]'>Variants:</p>
-                        <ul>
+                        <ul className='grid grid-cols-3'>
                             {product.variants?.map((variant, vIndex) => (
                                 <li key={vIndex} className='text-[13px]'>
                                     {variant.variantTitle} - ${variant.variantPrice.$numberDecimal} - Stock: {variant.variantQuantity}
@@ -125,7 +125,7 @@ const Products = () => {
 
             {
                 product &&
-                <div className='absolute inset-0 bg-black/10 flex items-center justify-center z-10'>
+                <div className='absolute h-screen inset-0 bg-black/10 flex items-center justify-center z-10'>
                     <div className='w-230 h-190 bg-white rounded-2xl flex flex-col p-10 mt-10' ref={popUpref}>
                         <div className='flex justify-between'>
                             <h1 className='text-[21px]'>Product Details</h1>

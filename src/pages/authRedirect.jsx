@@ -7,6 +7,7 @@ const AuthRedirect = ({ children }) => {
         return <Navigate to="/" replace />;
     }
 
+
     return children;
 };
 
