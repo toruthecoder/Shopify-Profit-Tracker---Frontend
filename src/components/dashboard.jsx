@@ -100,7 +100,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className='flex flex-col items-center w-full'>
+        <div className='flex flex-col items-center w-full mt-1'>
             {/* Trial expired banner */}
             {isViewOnly && (
                 <div className='w-full bg-red-500 text-white text-center py-2 text-sm font-medium flex items-center justify-center gap-3'>
@@ -217,7 +217,7 @@ const Dashboard = () => {
                             <div className='text-xl text-gray-500 mt-1'>Customers</div>
                         </div>
                     </div>
-                    <div className='flex-1 mb-20'>
+                    <div className='flex-1'>
                         {data?.chartData && (
                             <div className='bg-white p-3 rounded-xl shadow-sm border border-gray-200'>
                                 <Line options={options} data={chartData} height={160} />

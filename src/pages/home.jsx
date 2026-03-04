@@ -4,6 +4,7 @@ import Products from '../components/products.jsx'
 import Input from '../components/input.jsx'
 import Orders from '../components/orders.jsx'
 import OrdersDetails from '../components/ordersDetails.jsx'
+import Plan from '../pages/plan.jsx'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
 import Subscription from './subscription.jsx'
@@ -22,8 +23,8 @@ function Home() {
 
     return (
         <div className="flex flex-col justify-center items-center">
-            <div className='w-full p-9 rounded-2xl relative'>
-                <div className='bg-white w-full flex justify-between items-center px-8 py-2 rounded-2xl'>
+            <div className='w-full relative mb-5'>
+                <div className='bg-white w-full flex justify-between items-center px-31 py-3'>
                     <h1 className='text-[31px]'>Profit Tracker</h1>
                     <div className='flex items-center gap-2'>
                         <FaUserCircle size={30} />
@@ -35,6 +36,7 @@ function Home() {
                 <Route path='/' element={<Nav />} >
                     <Route index element={<Dashboard />} />
                     <Route path='subscription' element={<Subscription />} />
+                    <Route path='plan' element={<Plan />} />
                     <Route path='products' element={<Products />} />
                     <Route path='orders' element={<Orders />} />
                     <Route path='orders/:id' element={<OrdersDetails />} />

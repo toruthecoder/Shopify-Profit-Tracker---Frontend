@@ -4,56 +4,60 @@ import axios from 'axios'
 export const usePlan = () => {
     const [planData, setPlanData] = useState({
         plan: null,
-        isTrialActive: false,
-        trialDaysRemaining: 0,
+        loading: true,
         canExportCSV: false,
         canInputCosts: false,
-        isViewOnly: false,
-        loading: true,
-        error: null,
+        isViewOnly: true,
     })
 
     useEffect(() => {
-        const fetchPlanStatus = async () => {
-            // Your localStorage key is 'userEmail' — match it exactly
+        const fetchPlan = async () => {
             const email = localStorage.getItem('userEmail')
-
             if (!email) {
-                // No email = no user = lock everything down
                 setPlanData({
-                    plan: 'expired',
+                    plan: 'none',
                     isTrialActive: false,
+                    trialStartDate: null,
+                    trialEndDate: null,
                     trialDaysRemaining: 0,
+                    subscriptionStatus: null,
                     canExportCSV: false,
                     canInputCosts: false,
                     isViewOnly: true,
                     loading: false,
-                    error: null,
                 })
                 return
             }
 
             try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_URL}/stripe/plan-status?email=${encodeURIComponent(email)}`
+                const res = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_URL}/stripe/plan-status?email=${email}`
                 )
-                setPlanData({ ...response.data, loading: false, error: null })
-            } catch (error) {
-                console.error('Failed to fetch plan status:', error)
+                const data = res.data
+
+                // Enable features only if trial is active or paid plan is active
+                const isActive = data.plan === 'starter' || data.plan === 'pro' || (data.plan === 'trial' && data.isTrialActive)
+
                 setPlanData({
-                    plan: 'trial',
-                    isTrialActive: true,
-                    trialDaysRemaining: 0,
-                    canExportCSV: true,
-                    canInputCosts: true,
-                    isViewOnly: false,
+                    ...data,
                     loading: false,
-                    error: error.message,
+                    canExportCSV: isActive,
+                    canInputCosts: isActive,
+                    isViewOnly: !isActive,
+                })
+            } catch (err) {
+                console.log(err)
+                setPlanData({
+                    plan: 'none',
+                    loading: false,
+                    canExportCSV: false,
+                    canInputCosts: false,
+                    isViewOnly: true,
                 })
             }
         }
 
-        fetchPlanStatus()
+        fetchPlan()
     }, [])
 
     return planData

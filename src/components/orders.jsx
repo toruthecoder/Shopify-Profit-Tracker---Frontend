@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useState, useEffect, useRef } from 'react'
 import { Triangle } from 'react-loader-spinner'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { RxCross1 } from "react-icons/rx";
 import { usePlan } from './usePlan'
 
 function Orders() {
@@ -87,7 +86,7 @@ function Orders() {
     const { totalPages, currentPage } = data?.pagination || {}
 
     return (
-        <div className="order flex flex-col items-center justify-center">
+        <div className="order flex flex-col items-center justify-center mt-10">
             <div className='flex items-center gap-5 mb-5'>
                 <p>Search: </p>
                 <input type="text" placeholder='Search by title, email or id' className='w-85 h-8 rounded-[5px] pl-3 bg-white focus:outline-none focus:ring-0' value={search} onChange={(e) => setSearch(e.target.value)} />

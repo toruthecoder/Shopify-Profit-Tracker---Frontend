@@ -7,11 +7,12 @@ import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { IoIosLogOut } from "react-icons/io";
+import { GoPaperAirplane } from "react-icons/go";
 
 function Nav() {
     const [isExpanded, setIsExpanded] = useState(false);
     const linkClass = ({ isActive }) =>
-        `flex items-center p-[4px] rounded-lg transition-all 
+        `flex items-center p-[4px] rounded-[4px] transition-all 
         ${isActive ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'}`;
 
     const navigate = useNavigate()
@@ -23,7 +24,7 @@ function Nav() {
 
     return (
         <>
-            <nav className='h-170 top-38 left-0 bg-white absolute rounded-2xl'
+            <nav className='h-170 top-38 left-0 bg-white absolute rounded-[10px]'
                 onMouseEnter={() => setIsExpanded(true)}
                 onMouseLeave={() => setIsExpanded(false)}
                 style={{
@@ -33,23 +34,27 @@ function Nav() {
                     overflow: "hidden",
                 }}>
                 <ul className='flex flex-col gap-5 items-left justify-left p-3  pt-8 h-full'>
-                    <li>
+                    <li className='text-[18px]'>
                         <NavLink to='/' className={linkClass} end><TbLayoutDashboard size={28} /> {isExpanded && 'Dashboard'}</NavLink>
                     </li>
 
-                    <li>
+                    <li className='text-[18px]'>
                         <NavLink to='/subscription' className={linkClass}><PiCurrencyDollarSimpleFill size={28} /> {isExpanded && 'Pricing'}</NavLink>
                     </li>
 
-                    <li>
+                    <li className='text-[18px]'>
+                        <NavLink to='/plan' className={linkClass}><GoPaperAirplane size={28} />{isExpanded && 'Plan'}</NavLink>
+                    </li>
+
+                    <li className='text-[18px]'>
                         <NavLink to='/products' className={linkClass}><LuClipboardList size={28} />{isExpanded && 'Products'}</NavLink>
                     </li>
 
-                    <li>
+                    <li className='text-[18px]'>
                         <NavLink to='/orders' className={linkClass}><GoPackageDependencies size={28} />{isExpanded && 'Orders'}</NavLink>
                     </li>
 
-                    <li>
+                    <li className='text-[18px]'>
                         <NavLink to='/input' className={linkClass}><HiOutlinePencilSquare size={28} />{isExpanded && 'Costs'}</NavLink>
                     </li>
 

@@ -103,7 +103,7 @@ const Products = () => {
     const { totalPages, currentPage } = data?.pagination || {}
 
     return (
-        <div className='flex flex-col items-center justify-center w-full'>
+        <div className='flex flex-col items-center justify-center w-full mt-17.5'>
             {/* Hot Products Banner */}
             <div className='w-full max-w-4xl mb-6'>
                 <div className='bg-white rounded-xl shadow-md p-4'>
@@ -190,7 +190,7 @@ const Products = () => {
                         <div className='flex gap-6'>
                             <div className='w-1/3'>
                                 {product?.src ? (
-                                    <img src={product.src} alt={product.alt || product.title} className='w-full h-auto object-contain rounded-lg border' />
+                                    <img src={product.src} alt={product.alt || product.title} className='w-full h-auto object-contain rounded-lg' />
                                 ) : (
                                     <div className='w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center'>No image</div>
                                 )}
