@@ -101,20 +101,40 @@ const Dashboard = () => {
 
     return (
         <div className='flex flex-col items-center w-full mt-1'>
-            {/* Trial expired banner */}
-            {isViewOnly && (
+            {/* No Plan - first time user */}
+            {plan === 'none' && (
+                <div className='w-full bg-gray-500 text-white text-center py-2 text-sm font-medium flex items-center justify-center gap-3'>
+                    You are currently on No Plan.
+                    <button
+                        onClick={() => navigate('/subscription')}
+                        className='bg-white text-gray-600 text-xs font-bold px-3 py-1 rounded hover:bg-gray-100'
+                    >
+                        Choose Plan
+                    </button>
+                </div>
+            )}
+
+            {/* Trial expired */}
+            {plan === 'trial' && isViewOnly && (
                 <div className='w-full bg-red-500 text-white text-center py-2 text-sm font-medium flex items-center justify-center gap-3'>
                     Your free trial has expired — view-only mode.
-                    <button onClick={() => navigate('/subscription')} className='bg-white text-red-500 text-xs font-bold px-3 py-1 rounded hover:bg-red-50'>
+                    <button
+                        onClick={() => navigate('/subscription')}
+                        className='bg-white text-red-500 text-xs font-bold px-3 py-1 rounded hover:bg-red-50'
+                    >
                         Upgrade Now
                     </button>
                 </div>
             )}
-            {/* Trial active banner */}
+
+            {/* Trial active */}
             {plan === 'trial' && !isViewOnly && (
                 <div className='w-full bg-orange-400 text-white text-center py-2 text-sm font-medium flex items-center justify-center gap-3'>
                     Free trial: {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining.
-                    <button onClick={() => navigate('/subscription')} className='bg-white text-orange-500 text-xs font-bold px-3 py-1 rounded hover:bg-orange-50'>
+                    <button
+                        onClick={() => navigate('/subscription')}
+                        className='bg-white text-orange-500 text-xs font-bold px-3 py-1 rounded hover:bg-orange-50'
+                    >
                         Upgrade
                     </button>
                 </div>
