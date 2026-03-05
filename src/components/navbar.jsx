@@ -47,6 +47,10 @@ function Nav() {
                     </li>
 
                     <li className='text-[18px]'>
+                        <NavLink to='/createproduct' className={linkClass}><LuClipboardList size={28} />{isExpanded && 'CreateProduct'}</NavLink>
+                    </li>
+
+                    <li className='text-[18px]'>
                         <NavLink to='/products' className={linkClass}><LuClipboardList size={28} />{isExpanded && 'Products'}</NavLink>
                     </li>
 

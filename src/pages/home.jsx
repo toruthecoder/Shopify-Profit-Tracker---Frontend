@@ -8,6 +8,7 @@ import Plan from '../pages/plan.jsx'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
 import Subscription from './subscription.jsx'
+import ProductManager from '../components/productManager.jsx'
 import { useEffect } from 'react'
 
 function Home() {
@@ -37,11 +38,11 @@ function Home() {
                     <Route index element={<Dashboard />} />
                     <Route path='subscription' element={<Subscription />} />
                     <Route path='plan' element={<Plan />} />
+                    <Route path='createproduct' element={<ProductManager />} />
                     <Route path='products' element={<Products />} />
                     <Route path='orders' element={<Orders />} />
                     <Route path='orders/:id' element={<OrdersDetails />} />
                     <Route path='input' element={<Input />} />
-
                 </Route>
             </Routes>
         </div >
