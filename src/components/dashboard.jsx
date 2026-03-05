@@ -147,7 +147,7 @@ const Dashboard = () => {
                 <div className='grid grid-cols-5 gap-4 w-full mb-2'>
                     <div className='bg-white p-8 flex flex-col justify-center items-left rounded-4xl pl-4 w-[250px] h-[178px]'>
                         <div className='flex items-center gap-4 mb-1'>
-                            <div className='bg-[#e7e7e7] p-1.5 rounded-4xl'><PiPackageThin size={35} /></div>
+                            <div className='bg-[#e7e7e7] p-1.5 rounded-4xl'><PiPackageThin size={20} /></div>
                             <h1 className='text-[18px] font-medium'>Products</h1>
                         </div>
                         <div className='text-[41px] ml-2 font-semibold'>{data?.stats?.totalProducts}</div>
