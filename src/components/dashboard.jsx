@@ -128,7 +128,7 @@ const Dashboard = () => {
                     >
                         <FaFire className="text-xl animate-pulse" />
                         <div>
-                            <h3 className="font-bold text-base">Hot Products 🔥</h3>
+                            <h3 className="font-bold text-base">Hot Products</h3>
                             <p className="text-xs opacity-90">Click to see top 5 best sellers</p>
                         </div>
                     </div>
