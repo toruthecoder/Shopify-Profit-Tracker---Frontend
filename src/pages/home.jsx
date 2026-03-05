@@ -36,7 +36,6 @@ function Home() {
             <Routes>
                 <Route path='/' element={<Nav />} >
                     <Route index element={<Dashboard />} />
-                    <Route path='subscription' element={<Subscription />} />
                     <Route path='plan' element={<Plan />} />
                     <Route path='createproduct' element={<ProductManager />} />
                     <Route path='products' element={<Products />} />
