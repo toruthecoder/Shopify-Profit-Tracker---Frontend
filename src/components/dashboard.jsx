@@ -104,7 +104,7 @@ const Dashboard = () => {
             {/* Trial expired banner */}
             {isViewOnly && (
                 <div className='w-full bg-red-500 text-white text-center py-2 text-sm font-medium flex items-center justify-center gap-3'>
-                    Your free trial has expired — view-only mode.
+                    Your have No Plan — view-only mode.
                     <button onClick={() => navigate('/subscription')} className='bg-white text-red-500 text-xs font-bold px-3 py-1 rounded hover:bg-red-50'>
                         Upgrade Now
                     </button>
