@@ -35,6 +35,7 @@ function Home() {
             </div>
             <Routes>
                 <Route path='/' element={<Nav />} >
+                    <Route path='subscription' element={<Subscription />} />
                     <Route index element={<Dashboard />} />
                     <Route path='plan' element={<Plan />} />
                     <Route path='createproduct' element={<ProductManager />} />
